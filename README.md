@@ -1,6 +1,9 @@
-# Tauri + React + Typescript
+# Windgets
+### **A finally good design for windows widgets.**
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Windgets number one priorty is design. It aims to bring a minimalistic, modern, and clean feel to your desktop.
+Any design feedback is appreciated at:
+TODO make google form for design feedback
 
 ## Recommended IDE Setup
 
