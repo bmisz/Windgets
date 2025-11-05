@@ -7,6 +7,7 @@ import './Weather.css';
 export default function Weather() {
 	const [weather, setWeather] = useState<any>(null);
 	const [icon, setIcon] = useState<string | undefined>(undefined);
+	const [descriptor, setDescriptor] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
 		fetchWeather();
@@ -17,6 +18,12 @@ export default function Weather() {
 
 		return () => clearInterval(interval);
 	}, []);
+
+	useEffect(() => {
+		if (weather) {
+			setDescriptor(computeWeatherTraits(weather));
+		}
+	}, [weather]);
 
 	async function fetchWeather() {
 		try {
@@ -50,14 +57,14 @@ export default function Weather() {
 	}
 
 	function computeWeatherTraits(weather: any) {
-		//TODO figure out best way to do this
+		// This might be the most shit function i've ever written.
+		
 		// Moisture trait
 		const humidity = weather?.main?.humidity;
 		let humidityWord: string | undefined;
 		if (humidity >= 80) {
 			humidityWord = 'Humid';
-		}
-		else if (humidity <= 30) {
+		} else if (humidity <= 30) {
 			humidityWord = 'Dry';
 		}
 
@@ -66,20 +73,15 @@ export default function Weather() {
 		let tempWord: string | undefined;
 		if (temperature >= 85) {
 			tempWord = 'Hot';
-		}
-		else if (temperature >= 70) {
+		} else if (temperature >= 70) {
 			tempWord = 'Warm';
-		}
-		else if (temperature >= 60) {
+		} else if (temperature >= 60) {
 			tempWord = 'Mild';
-		}
-		else if (temperature >= 40) {
+		} else if (temperature >= 40) {
 			tempWord = 'Chilly';
-		}
-		else if (temperature >= 30) {
+		} else if (temperature >= 30) {
 			tempWord = 'Cold';
-		}
-		else {
+		} else {
 			tempWord = 'Freezing';
 		}
 
@@ -88,36 +90,35 @@ export default function Weather() {
 		let windWord: string | undefined;
 		if (wind < 7) {
 			windWord = 'Calm';
-		}
-		else if (wind < 15) {
+		} else if (wind < 15) {
 			windWord = 'Breezy';
-		}
-		else if (wind > 15 && wind < 40) {
+		} else if (wind > 15 && wind < 40) {
 			windWord = 'Windy';
-		}
-		else {
+		} else {
 			return 'Extreme Winds';
 		}
-
 
 		// Two word computation
 		if (humidityWord === undefined) {
 			return tempWord + ' and ' + windWord;
-		}
-		else if (humidityWord === 'Humid' && temperature >= 60 && temperature <= 70) {
+		} else if (
+			humidityWord === 'Humid' &&
+			temperature >= 60 &&
+			temperature <= 70
+		) {
 			return 'Mild and Humid';
-		}
-		else if (humidityWord === 'Humid' && temperature >= 70 && temperature <= 80) {
+		} else if (
+			humidityWord === 'Humid' &&
+			temperature >= 70 &&
+			temperature <= 80
+		) {
 			return 'Warm and Humid';
-		}
-		else if (humidityWord === 'Humid' && temperature >= 80) {
+		} else if (humidityWord === 'Humid' && temperature >= 80) {
 			return 'Hot and Humid';
-		}
-		else if (humidityWord === 'Dry' && !(wind > 15)) {
-			return `${tempWord} and Dry`
-		}
-		else {
-			return `${tempWord} and ${windWord}`
+		} else if (humidityWord === 'Dry' && !(wind > 15)) {
+			return `${tempWord} and Dry`;
+		} else {
+			return `${tempWord} and ${windWord}`;
 		}
 	}
 
@@ -132,7 +133,9 @@ export default function Weather() {
 					<h3 className="temp">
 						{Math.round(weather?.main?.temp) || 'Loading...'}°
 					</h3>
-					<a className="two-word">{computeWeatherTraits(weather)}</a>{' '}
+					<a className="two-word">
+						{descriptor === undefined ? 'Undefined' : descriptor}
+					</a>{' '}
 					{/* TODO: add 2 word description functionality. */}
 				</div>
 				<div className="condition-icon">
