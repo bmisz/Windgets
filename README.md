@@ -1,5 +1,5 @@
 # Windgets
-### **A finally good design for windows widgets.**
+### **A finally good design for Windows widgets.**
 
 Windgets number one priorty is design. It aims to bring a minimalistic, modern, and clean feel to your desktop.
 Any design feedback is appreciated at:

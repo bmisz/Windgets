@@ -26,7 +26,7 @@
 .condition-icon {
 	height: 80px;
 	width: 80px;
-	margin-right: 1rem;
+	padding: 0.4rem;
 }
 .bottom-container {
 	margin-inline: 1rem;
@@ -34,12 +34,13 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-	margin-top: 30vh;
+	margin-top: auto
 
 }
 .weather-widget {
 	display: flex;
 	flex-direction: column;
+	min-height: 90vh;
 }
 .icon {
 	width: 80px;
@@ -54,4 +55,10 @@
 	height: 20px;
 	align-self: center;
 	margin-bottom: 11px;
+}
+.two-word {
+	margin-top: 1rem;
+	padding-left: 1rem;
+	color: #8a8a8a;
+	font-weight: bold;
 }

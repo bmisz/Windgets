@@ -13,7 +13,7 @@
     "windows": [
       {
         "x":0,
-        "y": 800,
+        "y": 1600,
         "title": "windgets",
         "width": 400,
         "height": 180,
@@ -21,7 +21,8 @@
         "focusable": false,
         "resizable": false,
         "transparent": true,
-        "skipTaskbar": true
+        "skipTaskbar": true,
+        "alwaysOnBottom": true
       }
     ],
     "security": {
