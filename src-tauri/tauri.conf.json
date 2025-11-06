@@ -30,7 +30,7 @@
         "label": "settings",
         "url": "/settings",
         "width": 400,
-        "height": 180,
+        "height": 500,
         "resizable": true,
         "visible": false
       }

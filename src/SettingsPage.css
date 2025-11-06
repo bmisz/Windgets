@@ -1,15 +1,18 @@
 .mainpage {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 .example {
-    color: #979797;
-    font-weight: bolder;
+	color: #979797;
+	font-weight: bolder;
 }
-.win-settin{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.win-setting {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.slider {
+	box-shadow: none;
 }

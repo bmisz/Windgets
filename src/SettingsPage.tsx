@@ -75,12 +75,12 @@ export default function SettingsPage() {
 			<a>Window Position</a>
 			<div className="win-setting">
 				<a>X: </a>
-				<input type="range" min={0} max={100} step={1}></input>
+				<input className='slider' type="range" min={0} max={100} step={1}></input>
 				<a>PLACEHOLDER</a>
 			</div>
 			<div className="win-setting">
 				<a>Y: </a>
-				<input type="range" min={0} max={100} step={1}></input>
+				<input className='slider' type="range" min={0} max={100} step={1}></input>
 				<a>PLACEHOLDER</a>
 			</div>
 		</div>
