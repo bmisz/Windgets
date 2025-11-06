@@ -2,5 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    windgets_lib::run()
+    windgets_lib::run();
+
 }

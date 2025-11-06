@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import './MainPage.css'
-export default function MainPage() {
+import './SettingsPage.css'
+export default function SettingsPage() {
     type UserSettings = {
         location: string,
         units: "imperial" | "metric"
@@ -31,11 +31,9 @@ export default function MainPage() {
 
     return (
         <div className="mainpage">
-            <h1>Windgets</h1>
-            <ul>
-                <li>TIME WIDGET</li>
-                <li>WEATHER WIDGET</li>
-            </ul>
+            <h1>Windgets Settings</h1>
+            
+            
         </div>
     )
 }

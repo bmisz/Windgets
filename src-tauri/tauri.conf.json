@@ -12,6 +12,8 @@
   "app": {
     "windows": [
       {
+        "label": "main",
+        "url": "index.html",
         "x":0,
         "y": 1600,
         "title": "windgets",
@@ -23,7 +25,16 @@
         "transparent": true,
         "skipTaskbar": true,
         "alwaysOnBottom": true
+      },
+      {
+        "label": "settings",
+        "url": "index.html#/settings",
+        "width": 400,
+        "height": 180,
+        "resizable": true,
+        "visible": false
       }
+
     ],
     "security": {
       "csp": null

@@ -1,9 +1,10 @@
 .top-container {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between; {/*TODO change space on left side to match right side*/}
-
+	justify-content: space-between; 
+	/* TODO change space on left side to match right side */
 }
+
 .weather {
 	display: flex;
 	flex-direction: column;
