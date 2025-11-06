@@ -28,7 +28,7 @@
       },
       {
         "label": "settings",
-        "url": "index.html#/settings",
+        "url": "/settings",
         "width": 400,
         "height": 180,
         "resizable": true,

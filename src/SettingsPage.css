@@ -4,3 +4,12 @@
     justify-content: center;
     align-items: center;
 }
+.example {
+    color: #979797;
+    font-weight: bolder;
+}
+.win-settin{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
