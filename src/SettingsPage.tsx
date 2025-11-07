@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
+import { LogicalPosition } from '@tauri-apps/api/window';
+import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import './SettingsPage.css';
+
 export default function SettingsPage() {
 	type UserSettings = {
 		location: string;
 		units: 'imperial' | 'metric';
-        x: number;
-        y: number;
+		x: number;
+		y: number;
 	};
 	const [settings, setSettings] = useState<UserSettings>();
 
@@ -21,6 +24,8 @@ export default function SettingsPage() {
 				const defaultSettings: UserSettings = {
 					location: 'Boston',
 					units: 'imperial',
+					x: 0,
+					y: 0,
 				};
 				setSettings(defaultSettings);
 				localStorage.setItem(
@@ -32,6 +37,8 @@ export default function SettingsPage() {
 			const defaultSettings: UserSettings = {
 				location: 'Boston',
 				units: 'imperial',
+				x: 0,
+				y: 0,
 			};
 			setSettings(defaultSettings);
 			localStorage.setItem(
@@ -44,14 +51,18 @@ export default function SettingsPage() {
 
 	useEffect(() => {
 		if (settings) {
-			// only run after settings is loaded
 			localStorage.setItem('userSettings', JSON.stringify(settings));
-			console.log('Changed user settings', settings);
+			updateWindowPosition();
 		}
 	}, [settings]);
 
-	function handleLocationChange() {
-		//TODO get users location
+	async function updateWindowPosition() {
+		let win = await WebviewWindow.getByLabel('weather');
+			win?.setPosition(
+				new LogicalPosition(settings?.x ?? 0, settings?.y ?? 0)
+			)
+			.catch((error) => console.log(error));
+			
 	}
 
 	return (
@@ -65,6 +76,8 @@ export default function SettingsPage() {
 					setSettings({
 						location: e.target.value,
 						units: settings?.units ?? 'imperial',
+						x: settings?.x ?? 0,
+						y: settings?.y ?? 0,
 					})
 				}
 			/>
@@ -75,12 +88,44 @@ export default function SettingsPage() {
 			<a>Window Position</a>
 			<div className="win-setting">
 				<a>X: </a>
-				<input className='slider' type="range" min={0} max={100} step={1}></input>
+				<input
+					id="xSlider"
+					className="slider"
+					type="range"
+					min={0}
+					max={100}
+					step={1}
+					value={settings?.x ?? 0}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+						setSettings({
+							location: settings?.location ?? '',
+							units: settings?.units ?? 'imperial',
+							x: Number(e.target.value),
+							y: settings?.y ?? 0,
+						});
+						updateWindowPosition();
+					}}
+				/>
 				<a>PLACEHOLDER</a>
 			</div>
 			<div className="win-setting">
 				<a>Y: </a>
-				<input className='slider' type="range" min={0} max={100} step={1}></input>
+				<input
+					className="slider"
+					type="range"
+					min={0}
+					max={100}
+					step={1}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+						setSettings({
+							location: settings?.location ?? '',
+							units: settings?.units ?? 'imperial',
+							x: settings?.x ?? 0,
+							y: Number(e.target.value),
+						})
+						updateWindowPosition();
+					}}
+				/>
 				<a>PLACEHOLDER</a>
 			</div>
 		</div>
