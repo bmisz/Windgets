@@ -63,3 +63,17 @@
 	color: #8a8a8a;
 	font-weight: bold;
 }
+.additional-weather-element {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.humidity-icon, .sunrise-icon, .sunset-icon{
+	width: 20px;
+	height: 20px;
+}
+.wind-icon {
+	width: 18px;
+	height: 18px;
+}

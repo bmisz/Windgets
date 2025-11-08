@@ -86,7 +86,8 @@ export default function SettingsPage() {
 			<a className="example">Boston, US</a>
 			<a className="example">Boston, MA, US</a>
 
-			<a>Window Position</a> //FIXME Weird visual bug where slider is in the middle on reopen of settings regardless of position.
+			<a>Window Position</a>
+			 {/* FIXME Weird visual bug where slider is in the middle on reopen of settings regardless of position. */}
 			<div className="win-setting">
 				<a>X: </a>
 				<input

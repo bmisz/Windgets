@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { weatherIcons } from './assets';
 import nav from './assets/nav.svg';
+import humidity from './assets/humidity.svg';
+import sunrise from './assets/sunrise.svg';
+import sunset from './assets/sunset.svg';
+import wind from './assets/wind.png';
 import './Weather.css';
 
 //TODO get users location automatically.
@@ -58,7 +62,7 @@ export default function Weather() {
 
 	function computeWeatherTraits(weather: any) {
 		// This might be the most shit function i've ever written.
-		
+
 		// Moisture trait
 		const humidity = weather?.main?.humidity;
 		let humidityWord: string | undefined;
@@ -143,13 +147,29 @@ export default function Weather() {
 					{/* TODO: fix weird positioning of icon. Square it in corner. */}
 				</div>
 			</div>
+
 			<div className="bottom-container">
-				<a>{Math.round(weather?.main?.humidity)}%</a>
-				<a>
-					{weather?.sys?.sunrise && formatTime(weather.sys.sunrise)}
-				</a>
-				<a>{weather?.sys?.sunset && formatTime(weather.sys.sunset)}</a>
-				<a>{Math.round(weather?.wind?.speed)} mph</a>
+				<div className="additional-weather-element">
+					<img className="humidity-icon" src={humidity} />
+					<a>{Math.round(weather?.main?.humidity)}%</a>
+				</div>
+				<div className="additional-weather-element">
+					<img className="sunrise-icon" src={sunrise} />
+					<a>
+						{weather?.sys?.sunrise &&
+							formatTime(weather.sys.sunrise)}
+					</a>
+				</div>
+				<div className="additional-weather-element">
+					<img className="sunset-icon" src={sunset} />
+					<a>
+						{weather?.sys?.sunset && formatTime(weather.sys.sunset)}
+					</a>
+				</div>
+				<div className="additional-weather-element">
+					<img className="wind-icon" src={wind} />
+					<a>{Math.round(weather?.wind?.speed)} mph</a>
+				</div>
 			</div>
 		</div>
 	);
