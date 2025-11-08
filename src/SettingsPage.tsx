@@ -58,11 +58,12 @@ export default function SettingsPage() {
 
 	async function updateWindowPosition() {
 		let win = await WebviewWindow.getByLabel('weather');
-			win?.setPosition(
-				new LogicalPosition(settings?.x ?? 0, settings?.y ?? 0)
-			)
-			.catch((error) => console.log(error));
-			
+		let realX = (screen.width * (settings?.x ?? 0)) / 100;
+		let realY = (screen.height * (settings?.y ?? 0)) / 100;
+		console.log("real x and y: ", realX, realY);
+		win?.setPosition(new LogicalPosition(realX, realY)).catch((error) =>
+			console.log(error)
+		);
 	}
 
 	return (
@@ -85,7 +86,7 @@ export default function SettingsPage() {
 			<a className="example">Boston, US</a>
 			<a className="example">Boston, MA, US</a>
 
-			<a>Window Position</a>
+			<a>Window Position</a> //FIXME Weird visual bug where slider is in the middle on reopen of settings regardless of position.
 			<div className="win-setting">
 				<a>X: </a>
 				<input
@@ -106,7 +107,7 @@ export default function SettingsPage() {
 						updateWindowPosition();
 					}}
 				/>
-				<a>PLACEHOLDER</a>
+				<a>{settings?.x ?? 0}%</a>
 			</div>
 			<div className="win-setting">
 				<a>Y: </a>
@@ -122,11 +123,11 @@ export default function SettingsPage() {
 							units: settings?.units ?? 'imperial',
 							x: settings?.x ?? 0,
 							y: Number(e.target.value),
-						})
+						});
 						updateWindowPosition();
 					}}
 				/>
-				<a>PLACEHOLDER</a>
+				<a>{settings?.y ?? 0}%</a>
 			</div>
 		</div>
 	);

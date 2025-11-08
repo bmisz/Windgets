@@ -29,7 +29,7 @@
       {
         "label": "settings",
         "url": "/settings",
-        "width": 400,
+        "width": 750,
         "height": 500,
         "resizable": true,
         "visible": false
