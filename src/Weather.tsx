@@ -35,6 +35,7 @@ export default function Weather() {
 				`https://api.openweathermap.org/data/2.5/weather?lat=42.773792292381984&lon=-70.94802658781295&units=imperial&appid=${
 					import.meta.env.VITE_OPEN_WEATHER_KEY
 				}`
+				//This currently has 0 functionality and only shows a random location near me.
 			);
 			console.log(response);
 			const data = await response.json();

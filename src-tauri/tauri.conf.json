@@ -10,7 +10,7 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
+    "windows": [ 
       {
         "label": "weather",
         "url": "index.html",

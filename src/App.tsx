@@ -2,12 +2,14 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Weather from "./Weather";
 import SettingsPage from "./SettingsPage";
+import Redirect from "./Redirect";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/" element={<Weather />} />
+        <Route path='/redirect' element={<Redirect />} />
       </Routes>
     </BrowserRouter>
   );
