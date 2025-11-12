@@ -73,7 +73,7 @@ export default function SettingsPage() {
 			<input
 				type="text"
 				value={settings?.location ?? ''}
-				onChange={(e) =>
+				onChange={(e) => //TODO get widget to auto update on settigns change
 					setSettings({
 						location: e.target.value,
 						units: settings?.units ?? 'imperial',

@@ -31,11 +31,19 @@ export default function Weather() {
 
 	async function fetchWeather() {
 		try {
+			const userSettingsRaw = localStorage.getItem('userSettings');
+
+			let userLocation = 'Not found';
+			if (userSettingsRaw) {
+				const userSettings = JSON.parse(userSettingsRaw);
+				userLocation = userSettings.location.replace(/,(\s*)/g, ',');
+				console.log(userLocation);
+			}
+
 			const response = await fetch(
-				`https://api.openweathermap.org/data/2.5/weather?lat=42.773792292381984&lon=-70.94802658781295&units=imperial&appid=${
+				`https://api.openweathermap.org/data/2.5/weather?q=${userLocation}&units=imperial&appid=${
 					import.meta.env.VITE_OPEN_WEATHER_KEY
 				}`
-				//This currently has 0 functionality and only shows a random location near me.
 			);
 			console.log(response);
 			const data = await response.json();
