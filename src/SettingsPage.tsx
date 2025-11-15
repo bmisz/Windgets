@@ -164,6 +164,7 @@ function WindowSelect() {
 			setOpenWindows([...openWindows, id.toString()]);
 		}
 	}
+	
 	async function createNewWidget(
 		url: string,
 		label: string,
