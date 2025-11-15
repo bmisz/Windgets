@@ -60,7 +60,7 @@ export default function SettingsPage() {
 		let win = await WebviewWindow.getByLabel('weather');
 		let realX = (screen.width * (settings?.x ?? 0)) / 100;
 		let realY = (screen.height * (settings?.y ?? 0)) / 100;
-		console.log("real x and y: ", realX, realY);
+		console.log('real x and y: ', realX, realY);
 		win?.setPosition(new LogicalPosition(realX, realY)).catch((error) =>
 			console.log(error)
 		);
@@ -73,7 +73,9 @@ export default function SettingsPage() {
 			<input
 				type="text"
 				value={settings?.location ?? ''}
-				onChange={(e) => //TODO get widget to auto update on settigns change
+				onChange={(
+					e //TODO get widget to auto update on settigns change
+				) =>
 					setSettings({
 						location: e.target.value,
 						units: settings?.units ?? 'imperial',
@@ -87,7 +89,7 @@ export default function SettingsPage() {
 			<a className="example">Boston, MA, US</a>
 
 			<a>Window Position</a>
-			 {/* FIXME Weird visual bug where slider is in the middle on reopen of settings regardless of position. */}
+			{/* FIXME Weird visual bug where slider is in the middle on reopen of settings regardless of position. */}
 			<div className="win-setting">
 				<a>X: </a>
 				<input
@@ -130,6 +132,87 @@ export default function SettingsPage() {
 				/>
 				<a>{settings?.y ?? 0}%</a>
 			</div>
+			<WindowSelect />
+		</div>
+	);
+}
+
+function WindowSelect() {
+	const [openWindows, setOpenWindows] = useState<string[]>([]);
+
+	useEffect(() => {
+		const saved = localStorage.getItem('openWindows');
+		if (saved) {
+			try {
+				const parsed = JSON.parse(saved);
+				setOpenWindows(parsed);
+				console.log('Loaded open windows successfully');
+			} catch {
+				console.error('Error parsing open windows');
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem('openWindows', JSON.stringify(openWindows));
+	}, [openWindows]);
+
+	function handleSelect(id: number) {
+		if (openWindows.includes(id.toString())) {
+			setOpenWindows(openWindows.filter((win) => win !== id.toString()));
+		} else {
+			setOpenWindows([...openWindows, id.toString()]);
+		}
+	}
+	async function createNewWidget(
+		url: string,
+		label: string,
+		title: string,
+		width: number,
+		height: number
+	) {
+		const webview = new WebviewWindow(label, {
+			url: url,
+			title: title,
+			width: width,
+			height: height,
+			resizable: false,
+			decorations: false,
+			focusable: false,
+			transparent: true,
+			alwaysOnBottom: true,
+			skipTaskbar: true,
+		});
+		webview.once('tauri://created', () => {
+			console.log(`Window '${label}' created successfully`);
+		});
+		webview.once('tauri://error', (e) => {
+			console.error(`Error creating window '${label}':`, e);
+		});
+		return webview
+	}
+
+	return (
+		<div>
+			<a>Widget Select:</a>
+			<ul className="widget-select-list">
+				<li>
+					<input
+						type="checkbox"
+						checked={openWindows.includes('0')}
+						onChange={() => handleSelect(0)}
+					/>
+					<label>Weather</label>
+				</li>
+				<li>
+					<input
+						type="checkbox"
+						checked={openWindows.includes('1')}
+						onChange={() => handleSelect(1)}
+					/>
+					<label>Spotify</label>
+				</li>
+			</ul>
 		</div>
 	);
 }

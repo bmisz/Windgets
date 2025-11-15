@@ -16,5 +16,12 @@
 .slider {
 	box-shadow: none;
 	width: 70vw;
-	
+}
+.widget-select-list {
+	display: flex;
+	list-style: none;
+	flex-direction: column;
+	justify-content: center;
+	padding: 0px;
+	align-items: baseline;
 }

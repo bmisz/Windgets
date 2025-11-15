@@ -51,7 +51,7 @@ pub fn run() {
                             window.set_focus().unwrap();
                         }
                     }
-                    //FIXME When I open and then close settings window it does not reopen.
+                    
                     _ => {
                         println!("menu item {:?} not handled", event.id);
                     }
