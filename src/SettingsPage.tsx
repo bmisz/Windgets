@@ -138,12 +138,15 @@ export default function SettingsPage() {
 }
 
 function WindowSelect() {
-	const [selectedWindows, setSelectedWindows] = useState<string[]>([]);
-	const [windowParameters, setWindowParameters] = useState<WidgetParameter[]>([]);
+	const [selectedWindows, setSelectedWindows] = useState<string[]>(() => {
+		const saved = localStorage.getItem('selectedWindows');
+		return saved ? JSON.parse(saved) : [];
+	});
 
 	/**
 	 * Use this interface when defining new widgets. Please add your new made parameters object into the windowParameters array,
 	 * as seen under the weatherWidgetParameters instantiation example.
+	 * Make sure that they are pushed into the proper spot that is the same as the id given to each widget by the checkboxes in settings.
 	 */
 	interface WidgetParameter {
 		url: string;
@@ -154,6 +157,8 @@ function WindowSelect() {
 		transparent: boolean;
 	}
 
+	const windowParameters: WidgetParameter[] = [];
+
 	const weatherWidgetParameters: WidgetParameter = {
 		label: 'weather',
 		url: '/weather',
@@ -162,7 +167,7 @@ function WindowSelect() {
 		height: 180,
 		transparent: true,
 	};
-	setWindowParameters(prevItems => [...prevItems, weatherWidgetParameters]);
+	windowParameters.push(weatherWidgetParameters);
 
 	useEffect(() => {
 		const saved = localStorage.getItem('selectedWindows');
@@ -170,7 +175,7 @@ function WindowSelect() {
 			try {
 				const parsed = JSON.parse(saved);
 				setSelectedWindows(parsed);
-				console.log('Loaded open windows successfully');
+				console.log('Loaded open windows successfully', parsed);
 			} catch {
 				console.error('Error parsing open windows');
 			}
@@ -178,22 +183,35 @@ function WindowSelect() {
 	}, []);
 
 	useEffect(() => {
-		localStorage.setItem('selectedWindows', JSON.stringify(selectedWindows));
+		localStorage.setItem(
+			'selectedWindows',
+			JSON.stringify(selectedWindows)
+		);
 		console.log(selectedWindows);
 
-		for(let i = 0; i < windowParameters.length; i++) {
-			try {
-				createNewWidget(windowParameters[i]);
-			} catch (error) {
-				console.log("Error creating widget", error);
+		selectedWindows.forEach((windowId) => {
+			const widgetIndex = parseInt(windowId);
+			if (windowParameters[widgetIndex]) {
+				try {
+					createNewWidget(windowParameters[widgetIndex]);
+				} catch (error) {
+					console.log('Error creating widget', error);
+				}
 			}
-		}
-
+		});
 	}, [selectedWindows]);
 
-	function handleSelect(id: number) {
+	async function handleSelect(id: number, label: string) {
 		if (selectedWindows.includes(id.toString())) {
-			setSelectedWindows(selectedWindows.filter((win) => win !== id.toString()));
+			setSelectedWindows(
+				selectedWindows.filter((win) => win !== id.toString())
+			);
+			const window = await WebviewWindow.getByLabel(label);
+			try {
+				window?.close();
+			} catch (error) {
+				console.log('Error closing window', error);
+			}
 		} else {
 			setSelectedWindows([...selectedWindows, id.toString()]);
 		}
@@ -234,7 +252,7 @@ function WindowSelect() {
 					<input
 						type="checkbox"
 						checked={selectedWindows.includes('0')}
-						onChange={() => handleSelect(0)}
+						onChange={() => handleSelect(0, 'weather')}
 					/>
 					<label>Weather</label>
 				</li>
@@ -242,7 +260,7 @@ function WindowSelect() {
 					<input
 						type="checkbox"
 						checked={selectedWindows.includes('1')}
-						onChange={() => handleSelect(1)}
+						onChange={() => handleSelect(1, 'spotify')}
 					/>
 					<label>Spotify</label>
 				</li>

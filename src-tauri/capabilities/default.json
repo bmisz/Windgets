@@ -5,6 +5,8 @@
 	"windows": ["main", "weather", "settings"],
 	"permissions": [
 		"core:window:allow-set-position",
+		"core:webview:allow-create-webview-window",
+		"core:window:allow-close",
 		"core:default",
 		"opener:default"
 	]
