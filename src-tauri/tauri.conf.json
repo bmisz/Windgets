@@ -29,7 +29,7 @@
       {
         "label": "settings",
         "title": "Windgets Settings",
-        "url": "/settings",
+        "url": "/",
         "width": 750,
         "height": 500,
         "resizable": true,

@@ -7,8 +7,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/" element={<Weather />} />
+        <Route path="/" element={<SettingsPage />} />
+        <Route path="/weather" element={<Weather />} />
         <Route path='/redirect' element={<Redirect />} />
       </Routes>
     </BrowserRouter>

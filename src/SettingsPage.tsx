@@ -143,7 +143,7 @@ function WindowSelect() {
 
 	/**
 	 * Use this interface when defining new widgets. Please add your new made parameters object into the windowParameters array,
-	 * as seen under the weatherWidgetParameters instantiation.
+	 * as seen under the weatherWidgetParameters instantiation example.
 	 */
 	interface WidgetParameter {
 		url: string;
@@ -163,7 +163,7 @@ function WindowSelect() {
 		transparent: true,
 	};
 	setWindowParameters(prevItems => [...prevItems, weatherWidgetParameters]);
-	
+
 	useEffect(() => {
 		const saved = localStorage.getItem('selectedWindows');
 		if (saved) {
@@ -180,6 +180,14 @@ function WindowSelect() {
 	useEffect(() => {
 		localStorage.setItem('selectedWindows', JSON.stringify(selectedWindows));
 		console.log(selectedWindows);
+
+		for(let i = 0; i < windowParameters.length; i++) {
+			try {
+				createNewWidget(windowParameters[i]);
+			} catch (error) {
+				console.log("Error creating widget", error);
+			}
+		}
 
 	}, [selectedWindows]);
 
@@ -200,7 +208,7 @@ function WindowSelect() {
 			resizable: false,
 			decorations: false,
 			focusable: false,
-			transparent: true,
+			transparent: WidgetParameters.transparent,
 			alwaysOnBottom: true,
 			skipTaskbar: true,
 		});
