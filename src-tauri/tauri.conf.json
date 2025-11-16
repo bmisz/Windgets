@@ -16,7 +16,7 @@
         "url": "index.html",
         "x":0,
         "y": 1600,
-        "title": "windgets",
+        "title": "weather",
         "width": 400,
         "height": 180,
         "decorations": false,
@@ -28,6 +28,7 @@
       },
       {
         "label": "settings",
+        "title": "Windgets Settings",
         "url": "/settings",
         "width": 750,
         "height": 500,
