@@ -29,14 +29,18 @@ export default function Weather() {
 		}
 	}, [weather]);
 
+
 	async function fetchWeather() {
 		try {
 			const userSettingsRaw = localStorage.getItem('userSettings');
 
-			let userLocation = 'Not found';
+			let userLocation = 'No location found';
 			if (userSettingsRaw) {
 				const userSettings = JSON.parse(userSettingsRaw);
 				userLocation = userSettings.location.replace(/,(\s*)/g, ',');
+				console.log(userLocation);
+			}
+			else {
 				console.log(userLocation);
 			}
 
@@ -134,13 +138,23 @@ export default function Weather() {
 			return `${tempWord} and ${windWord}`;
 		}
 	}
+	
+	function getUserLocation() {
+		const userSettingsRaw = localStorage.getItem('userSettings');
+		if (userSettingsRaw) {
+			const userSettings = JSON.parse(userSettingsRaw);
+			let userLocation: string = userSettings.location
+			userLocation = userLocation.substring(0, userLocation.indexOf(','));
+			return userLocation
+		}
+	}
 
 	return (
 		<div className="weather-widget">
 			<div className="top-container">
 				<div className="weather">
 					<div className="city-container">
-						<h3 className="city">West Newbury</h3>
+						<h3 className="city">{getUserLocation()}</h3>
 						<img className="nav-icon" src={nav} />
 					</div>
 					<h3 className="temp">
