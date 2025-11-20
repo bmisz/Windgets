@@ -7,7 +7,7 @@ import sunset from './assets/sunset.svg';
 import wind from './assets/wind.png';
 import './Weather.css';
 
-//TODO get users location automatically.
+//TODO get users location automatically. Idk if i wanna do this though.
 export default function Weather() {
 	const [weather, setWeather] = useState<any>(null);
 	const [icon, setIcon] = useState<string | undefined>(undefined);
@@ -163,7 +163,6 @@ export default function Weather() {
 					<a className="two-word">
 						{descriptor === undefined ? 'Undefined' : descriptor}
 					</a>{' '}
-					{/* TODO: add 2 word description functionality. */}
 				</div>
 				<div className="condition-icon">
 					<img className="icon" src={icon} alt="Weather Icon" />

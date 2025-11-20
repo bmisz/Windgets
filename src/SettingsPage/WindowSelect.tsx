@@ -32,8 +32,17 @@ export default function WindowSelect({
 		transparent: true,
 	};
 	windowParameters.push(weatherWidgetParameters);
-	// add other widget params so indexes match checkboxes (e.g. spotify) ...
-	// windowParameters.push(spotifyWidgetParameters);
+
+	const spotifyWidgetParameters: WidgetParameter = {
+		label: 'spotify',
+		url: '/spotify',
+		title: 'Spotify',
+		width: 400,
+		height: 180,
+		transparent: true,
+	};
+	windowParameters.push(spotifyWidgetParameters);
+	// add other widget params so indexes match checkboxes...
 
 	// Track labels currently being created to prevent duplicates
 	const creating = useRef<Set<string>>(new Set());
