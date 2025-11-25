@@ -1,7 +1,7 @@
 .top-container {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between; 
+	justify-content: space-between;
 	/* TODO change space on left side to match right side */
 }
 
@@ -19,7 +19,7 @@
 }
 
 .city {
-    align-self: baseline;
+	align-self: baseline;
 	padding-top: 0.2rem;
 	padding-right: 4px;
 	margin-top: 0px;
@@ -32,13 +32,13 @@
 .bottom-container {
 	margin-inline: 1rem;
 	margin-bottom: 0rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-	margin-top: auto
-
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: auto;
 }
 .weather-widget {
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	min-height: 90vh;
@@ -69,7 +69,9 @@
 	align-items: center;
 	justify-content: center;
 }
-.humidity-icon, .sunrise-icon, .sunset-icon{
+.humidity-icon,
+.sunrise-icon,
+.sunset-icon {
 	width: 20px;
 	height: 20px;
 }
