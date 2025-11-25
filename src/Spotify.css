@@ -14,9 +14,7 @@
 	padding-bottom: 0rem;
 	flex: 1;
 }
-a {
-	padding-bottom: 0.8rem;
-}
+
 .spotify-widget {
 	display: flex;
 	flex-direction: row;

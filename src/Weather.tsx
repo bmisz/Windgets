@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { weatherIcons } from './assets';
+import { weatherIcons, nightWeatherIcons } from './assets';
 import nav from './assets/nav.svg';
 import humidity from './assets/humidity.svg';
 import sunrise from './assets/sunrise.svg';
@@ -29,7 +29,6 @@ export default function Weather() {
 		}
 	}, [weather]);
 
-
 	async function fetchWeather() {
 		try {
 			const userSettingsRaw = localStorage.getItem('userSettings');
@@ -39,8 +38,7 @@ export default function Weather() {
 				const userSettings = JSON.parse(userSettingsRaw);
 				userLocation = userSettings.location.replace(/,(\s*)/g, ',');
 				console.log(userLocation);
-			}
-			else {
+			} else {
 				console.log(userLocation);
 			}
 
@@ -54,11 +52,22 @@ export default function Weather() {
 			setWeather(data);
 
 			const iconCode = data.weather[0].id;
-			console.log(iconCode);
-			const iconPath = weatherIcons[iconCode];
-			if (iconPath) {
-				setIcon(iconPath);
+
+			const unixEpochTime = Date.now();
+			
+			if (unixEpochTime <= data.sys.sunset * 1000) {	
+				const iconPath = weatherIcons[iconCode];
+				if (iconPath) {
+					setIcon(iconPath);
+				}
 			}
+			else {
+				const iconPath = nightWeatherIcons[iconCode];
+				if (iconPath) {
+					setIcon(iconPath);
+				}
+			}
+
 		} catch (error) {
 			console.log(error);
 		}
@@ -138,14 +147,14 @@ export default function Weather() {
 			return `${tempWord} and ${windWord}`;
 		}
 	}
-	
+
 	function getUserLocation() {
 		const userSettingsRaw = localStorage.getItem('userSettings');
 		if (userSettingsRaw) {
 			const userSettings = JSON.parse(userSettingsRaw);
-			let userLocation: string = userSettings.location
+			let userLocation: string = userSettings.location;
 			userLocation = userLocation.substring(0, userLocation.indexOf(','));
-			return userLocation
+			return userLocation;
 		}
 	}
 

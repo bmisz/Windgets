@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { LogicalPosition } from '@tauri-apps/api/window';
+import { LogicalPosition,  } from '@tauri-apps/api/window';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import './SettingsPage.css';
 import WindowSelect from './WindowSelect';
+
 
 export default function SettingsPage() {
 	type UserSettings = {
@@ -40,6 +41,7 @@ export default function SettingsPage() {
 		);
 	}
 
+
 	return (
 		<div className="mainpage">
 			<h3>Windgets Settings</h3>
@@ -50,6 +52,7 @@ export default function SettingsPage() {
 				onChange={(
 					e //TODO get widget to auto update on settigns change
 				) =>
+					
 					setSettings({
 						location: e.target.value,
 						units: settings?.units ?? 'imperial',
