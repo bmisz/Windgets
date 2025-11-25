@@ -1,3 +1,6 @@
+<img src=https://github.com/user-attachments/assets/845d6a27-6615-4da9-91b5-7f3a78058ff5 alt='logo' width="175"/>
+
+
 # Windgets
 ### **A finally good design for Windows widgets.**
 
