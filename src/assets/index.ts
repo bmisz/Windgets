@@ -12,19 +12,6 @@ import sleet from './sleet.svg';
 import clearnight from './clear-night.svg';
 import partlycloudynight from './partlycloudy-night.svg';
 
-const unixEpochTime = Date.now();
-
-var localTime = new Date(unixEpochTime).toLocaleTimeString('en-US', {
-	hour: '2-digit',
-	minute: '2-digit',
-});
-
-const firstNum = localTime.charAt(0);
-
-if (firstNum == "0") {
-    localTime = localTime.substring(1);
-}
-
 export const weatherIcons: Record<number, string> = {
 	300: lightrain,
 	301: lightrain,
