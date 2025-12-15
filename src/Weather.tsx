@@ -7,7 +7,6 @@ import sunset from './assets/sunset.svg';
 import wind from './assets/wind.png';
 import './Weather.css';
 
-//TODO get users location automatically. Idk if i wanna do this though.
 export default function Weather() {
 	const [weather, setWeather] = useState<any>(null);
 	const [icon, setIcon] = useState<string | undefined>(undefined);
@@ -175,7 +174,6 @@ export default function Weather() {
 				</div>
 				<div className="condition-icon">
 					<img className="icon" src={icon} alt="Weather Icon" />
-					{/* TODO: fix weird positioning of icon. Square it in corner. */}
 				</div>
 			</div>
 

@@ -2,7 +2,6 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	/* TODO change space on left side to match right side */
 }
 
 .weather {

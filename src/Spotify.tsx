@@ -9,7 +9,7 @@ export default function Spotify() {
 	
 	return (
 		<div className="spotify-widget">
-			<div className="album-cover">Album Cover</div>
+			<div className="album-cover">Not implemented</div>
 			<div className="album-info">
 				<a>Track Name</a>
 				<a>Album Name</a>
