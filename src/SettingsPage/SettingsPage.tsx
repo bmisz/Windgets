@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LogicalPosition,  } from '@tauri-apps/api/window';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
+import { load } from '@tauri-apps/plugin-store'; //TODO Implement this bitch
 import './SettingsPage.css';
 import WindowSelect from './WindowSelect';
 
@@ -16,17 +17,21 @@ export default function SettingsPage() {
 		const saved = localStorage.getItem('userSettings');
 		if (saved) {
 			try {
+				console.log('settings loaded');
 				return JSON.parse(saved);
 			} catch {
+				console.error('failed to load settings');
 				return { location: 'Boston', units: 'imperial', x: 0, y: 0 };
 			}
 		}
+		console.log('no settings found');
 		return { location: 'Boston', units: 'imperial', x: 0, y: 0 };
 	});
 
 	useEffect(() => {
 		if (settings) {
 			localStorage.setItem('userSettings', JSON.stringify(settings));
+			console.log('settings updated');
 			updateWindowPosition();
 		}
 	}, [settings]);

@@ -3,5 +3,4 @@
 
 fn main() {
     windgets_lib::run();
-
 }
