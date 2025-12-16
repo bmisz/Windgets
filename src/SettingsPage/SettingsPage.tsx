@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { LogicalPosition,  } from '@tauri-apps/api/window';
+import { LogicalPosition } from '@tauri-apps/api/window';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { load } from '@tauri-apps/plugin-store'; //TODO Implement this bitch
 import './SettingsPage.css';
 import WindowSelect from './WindowSelect';
-
 
 export default function SettingsPage() {
 	type UserSettings = {
@@ -13,28 +12,37 @@ export default function SettingsPage() {
 		x: number;
 		y: number;
 	};
-	const [settings, setSettings] = useState<any>(() => {
+	const defaultSettings: UserSettings = {
+		location: 'Boston',
+		units: 'imperial',
+		x: 0,
+		y: 0,
+	};
+	const [settings, setSettings] = useState<UserSettings>(defaultSettings);
+
+	useEffect(() => {
 		const loadSettings = async () => {
 			const store = await load('settings.json');
-			const val = await store.get('userSettings');
+			const val = await store.get<UserSettings>('userSettings');
 
-			if (!val) {
+			if (val === undefined) {
 				console.log('No settings found.');
-				return { location: 'Boston', units: 'imperial', x: 0, y: 0 };
+				setSettings(defaultSettings);
+			} else {
+				console.log('Settings found.');
+				setSettings(val);
 			}
+		};
+		loadSettings();
+	}, []);
 
-			console.log('Settings found.');			
-			return val;	
-		}
-		const settings = loadSettings();
-		return settings;
-	});
-
-	
 	useEffect(() => {
 		if (settings) {
-			localStorage.setItem('userSettings', JSON.stringify(settings));
-			console.log('settings updated');
+			async () => {
+				const store = await load('settings.json');
+				await store.set('userSettings', settings);
+				console.log('Settings updated');
+			}
 			updateWindowPosition();
 		}
 	}, [settings]);
@@ -49,7 +57,6 @@ export default function SettingsPage() {
 		);
 	}
 
-
 	return (
 		<div className="mainpage">
 			<h3>Windgets Settings</h3>
@@ -60,7 +67,6 @@ export default function SettingsPage() {
 				onChange={(
 					e //TODO get widget to auto update on settigns change
 				) =>
-					
 					setSettings({
 						location: e.target.value,
 						units: settings?.units ?? 'imperial',
@@ -114,9 +120,7 @@ export default function SettingsPage() {
 				/>
 				<a>{settings?.y ?? 0}%</a>
 			</div>
-			<WindowSelect updateWindowPosition={updateWindowPosition}/>
+			<WindowSelect updateWindowPosition={updateWindowPosition} />
 		</div>
 	);
 }
-
-
