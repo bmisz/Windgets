@@ -13,21 +13,24 @@ export default function SettingsPage() {
 		x: number;
 		y: number;
 	};
-	const [settings, setSettings] = useState<UserSettings>(() => {
-		const saved = localStorage.getItem('userSettings');
-		if (saved) {
-			try {
-				console.log('settings loaded');
-				return JSON.parse(saved);
-			} catch {
-				console.error('failed to load settings');
+	const [settings, setSettings] = useState<any>(() => {
+		const loadSettings = async () => {
+			const store = await load('settings.json');
+			const val = await store.get('userSettings');
+
+			if (!val) {
+				console.log('No settings found.');
 				return { location: 'Boston', units: 'imperial', x: 0, y: 0 };
 			}
+
+			console.log('Settings found.');			
+			return val;	
 		}
-		console.log('no settings found');
-		return { location: 'Boston', units: 'imperial', x: 0, y: 0 };
+		const settings = loadSettings();
+		return settings;
 	});
 
+	
 	useEffect(() => {
 		if (settings) {
 			localStorage.setItem('userSettings', JSON.stringify(settings));
