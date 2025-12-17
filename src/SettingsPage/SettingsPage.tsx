@@ -5,13 +5,13 @@ import { load } from '@tauri-apps/plugin-store'; //TODO Implement this bitch
 import './SettingsPage.css';
 import WindowSelect from './WindowSelect';
 
+export type UserSettings = {
+	location: string;
+	units: 'imperial' | 'metric';
+	x: number;
+	y: number;
+};
 export default function SettingsPage() {
-	type UserSettings = {
-		location: string;
-		units: 'imperial' | 'metric';
-		x: number;
-		y: number;
-	};
 	const defaultSettings: UserSettings = {
 		location: 'Boston',
 		units: 'imperial',
@@ -27,6 +27,8 @@ export default function SettingsPage() {
 
 			if (val === undefined) {
 				console.log('No settings found.');
+				await store.set('userSettings', defaultSettings);
+				await store.save();
 				setSettings(defaultSettings);
 			} else {
 				console.log('Settings found.');
@@ -41,6 +43,8 @@ export default function SettingsPage() {
 			async () => {
 				const store = await load('settings.json');
 				await store.set('userSettings', settings);
+				const saving = store.save();
+				await saving;
 				console.log('Settings updated');
 			}
 			updateWindowPosition();

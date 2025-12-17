@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { load } from '@tauri-apps/plugin-store';
+import { UserSettings } from './SettingsPage/SettingsPage';
 import { weatherIcons, nightWeatherIcons } from './assets';
 import nav from './assets/nav.svg';
 import humidity from './assets/humidity.svg';
@@ -9,15 +11,21 @@ import './Weather.css';
 
 export default function Weather() {
 	const [weather, setWeather] = useState<any>(null);
+	const [userLocation, setUserLocation] = useState<any>('Loading...');
 	const [icon, setIcon] = useState<string | undefined>(undefined);
 	const [descriptor, setDescriptor] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
+		const userLoc = getUserLocation();
+		setUserLocation(userLoc);
 		fetchWeather();
 
-		const interval = setInterval(() => {
-			fetchWeather();
-		}, 1000 * 60 * 20);
+		const interval = setInterval(
+			() => {
+				fetchWeather();
+			},
+			1000 * 60 * 20
+		);
 
 		return () => clearInterval(interval);
 	}, []);
@@ -28,13 +36,20 @@ export default function Weather() {
 		}
 	}, [weather]);
 
+	async function getUserSettings() {
+		const store = await load('settings.json');
+		const settingsPromise = store.get<UserSettings>('userSettings');
+		const settings = await settingsPromise;
+		console.log(settings);
+		return settings;
+	}
+
 	async function fetchWeather() {
 		try {
-			const userSettingsRaw = localStorage.getItem('userSettings');
+			const userSettings = await getUserSettings();
 
 			let userLocation = 'No location found';
-			if (userSettingsRaw) {
-				const userSettings = JSON.parse(userSettingsRaw);
+			if (userSettings) {
 				userLocation = userSettings.location.replace(/,(\s*)/g, ',');
 				console.log(userLocation);
 			} else {
@@ -53,20 +68,18 @@ export default function Weather() {
 			const iconCode = data.weather[0].id;
 
 			const unixEpochTime = Date.now();
-			
-			if (unixEpochTime <= data.sys.sunset * 1000) {	
+
+			if (unixEpochTime <= data.sys.sunset * 1000) {
 				const iconPath = weatherIcons[iconCode];
 				if (iconPath) {
 					setIcon(iconPath);
 				}
-			}
-			else {
+			} else {
 				const iconPath = nightWeatherIcons[iconCode];
 				if (iconPath) {
 					setIcon(iconPath);
 				}
 			}
-
 		} catch (error) {
 			console.log(error);
 		}
@@ -147,14 +160,14 @@ export default function Weather() {
 		}
 	}
 
-	function getUserLocation() {
-		const userSettingsRaw = localStorage.getItem('userSettings');
-		if (userSettingsRaw) {
-			const userSettings = JSON.parse(userSettingsRaw);
-			let userLocation: string = userSettings.location;
-			userLocation = userLocation.substring(0, userLocation.indexOf(','));
-			return userLocation;
+	async function getUserLocation() {
+		const userSettings = await getUserSettings();
+
+		if (userSettings !== undefined) {
+			console.log(userSettings.location);
+			return userSettings.location;
 		}
+		return 'Loading...';
 	}
 
 	return (
@@ -162,7 +175,7 @@ export default function Weather() {
 			<div className="top-container">
 				<div className="weather">
 					<div className="city-container">
-						<h3 className="city">{getUserLocation()}</h3>
+						<h3 className="city">{userLocation}</h3>
 						<img className="nav-icon" src={nav} />
 					</div>
 					<h3 className="temp">
