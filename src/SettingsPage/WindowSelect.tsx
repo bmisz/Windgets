@@ -1,5 +1,6 @@
 import './SettingsPage.css';
 import { useState, useEffect, useRef } from 'react';
+import { load } from '@tauri-apps/plugin-store';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 
 export default function WindowSelect({
@@ -7,10 +8,7 @@ export default function WindowSelect({
 }: {
 	updateWindowPosition: () => Promise<void>;
 }) {
-	const [selectedWindows, setSelectedWindows] = useState<string[]>(() => {
-		const saved = localStorage.getItem('selectedWindows');
-		return saved ? JSON.parse(saved) : [];
-	});
+	const [selectedWindows, setSelectedWindows] = useState<string[]>([]);
 
 	interface WidgetParameter {
 		url: string;
@@ -47,13 +45,33 @@ export default function WindowSelect({
 	// Track labels currently being created to prevent duplicates
 	const creating = useRef<Set<string>>(new Set());
 
+	useEffect(() => {
+		const loadSavedWindows = async () => {
+			try {
+				const store = await load('settings.json');
+				const val = await store.get<string[]>('selectedWindows');
+				if (val) {
+					setSelectedWindows(val);
+				}
+			} catch (error) {
+				console.error('Failed to load settings:', error);
+			}
+		};
+
+		loadSavedWindows();
+	}, []);
+
 	// Persist selectedWindows and sync actual windows
 	useEffect(() => {
-		localStorage.setItem(
-			'selectedWindows',
-			JSON.stringify(selectedWindows)
-		);
-		console.log('selectedWindows ->', selectedWindows);
+		console.log('Running selectedWindows useEffect');
+		(async () => {
+			const store = await load('settings.json');
+			await store.set('selectedWindows', selectedWindows);
+			const windowsSelected = await store.get('selectedWindows');
+			console.log(windowsSelected);
+			await store.save();
+			console.log('Store saved selectedWindows');
+		})();
 
 		(async () => {
 			for (const windowId of selectedWindows) {

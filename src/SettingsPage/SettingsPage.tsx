@@ -19,6 +19,7 @@ export default function SettingsPage() {
 		y: 0,
 	};
 	const [settings, setSettings] = useState<UserSettings>(defaultSettings);
+	const [isInitialized, setIsInitialized] = useState(false);
 
 	useEffect(() => {
 		const loadSettings = async () => {
@@ -29,27 +30,28 @@ export default function SettingsPage() {
 				console.log('No settings found.');
 				await store.set('userSettings', defaultSettings);
 				await store.save();
-				setSettings(defaultSettings);
 			} else {
-				console.log('Settings found.');
+				console.log('Settings found.', val);
 				setSettings(val);
 			}
+			setIsInitialized(true);
 		};
 		loadSettings();
 	}, []);
 
 	useEffect(() => {
-		if (settings) {
-			async () => {
-				const store = await load('settings.json');
-				await store.set('userSettings', settings);
-				const saving = store.save();
-				await saving;
-				console.log('Settings updated');
-			}
-			updateWindowPosition();
-		}
-	}, [settings]);
+		if (!isInitialized) return;
+
+		const saveSettings = async () => {
+			const store = await load('settings.json');
+			await store.set('userSettings', settings);
+			await store.save();
+			console.log('Settings saved to disk');
+		};
+		
+		saveSettings();
+		updateWindowPosition();
+	}, [settings, isInitialized]);
 
 	async function updateWindowPosition() {
 		let win = await WebviewWindow.getByLabel('weather');
