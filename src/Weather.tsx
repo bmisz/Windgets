@@ -164,8 +164,10 @@ export default function Weather() {
 		const userSettings = await getUserSettings();
 
 		if (userSettings !== undefined) {
-			console.log(userSettings.location);
-			return userSettings.location;
+			const rawLocation: string = userSettings.location;
+			const commaLocation: number = rawLocation.indexOf(',');
+			const pureLocation: string = rawLocation.substring(0, commaLocation);
+			return pureLocation;
 		}
 		return 'Loading...';
 	}

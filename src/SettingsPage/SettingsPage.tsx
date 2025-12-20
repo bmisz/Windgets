@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LogicalPosition } from '@tauri-apps/api/window';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
-import { load } from '@tauri-apps/plugin-store'; //TODO Implement this bitch
-import './SettingsPage.css';
+import { load } from '@tauri-apps/plugin-store';
 import WindowSelect from './WindowSelect';
+import WindowSliders from './WindowSliders';
 
 export type UserSettings = {
 	location: string;
@@ -86,46 +86,7 @@ export default function SettingsPage() {
 			<a className="example">Boston, MA, US</a>
 
 			<a>Window Position</a>
-			<div className="win-setting">
-				<a>X: </a>
-				<input
-					id="xSlider"
-					className="slider"
-					type="range"
-					min={0}
-					max={100}
-					step={1}
-					value={settings?.x}
-					onChange={(e) => {
-						const newVal = Number(e.target.value);
-						setSettings((prev) => ({
-							...prev,
-							x: newVal,
-						}));
-					}}
-				/>
-				<a>{settings?.x ?? 0}%</a>
-			</div>
-			<div className="win-setting">
-				<a>Y: </a>
-				<input
-					id="ySlider"
-					className="slider"
-					type="range"
-					min={0}
-					max={100}
-					step={1}
-					value={settings?.y}
-					onChange={(e) => {
-						const newVal = Number(e.target.value);
-						setSettings((prev) => ({
-							...prev,
-							y: newVal,
-						}));
-					}}
-				/>
-				<a>{settings?.y ?? 0}%</a>
-			</div>
+			<WindowSliders settings={settings} setSettings={setSettings} />
 			<WindowSelect updateWindowPosition={updateWindowPosition} />
 		</div>
 	);
