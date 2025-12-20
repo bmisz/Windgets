@@ -9,6 +9,7 @@ export default function WindowSelect({
 	updateWindowPosition: () => Promise<void>;
 }) {
 	const [selectedWindows, setSelectedWindows] = useState<string[]>([]);
+	const [isInitialized, setIsInitialized] = useState(false);
 
 	interface WidgetParameter {
 		url: string;
@@ -53,6 +54,7 @@ export default function WindowSelect({
 				if (val) {
 					setSelectedWindows(val);
 				}
+				setIsInitialized(true);
 			} catch (error) {
 				console.error('Failed to load settings:', error);
 			}
@@ -63,6 +65,8 @@ export default function WindowSelect({
 
 	// Persist selectedWindows and sync actual windows
 	useEffect(() => {
+		if (!isInitialized) return;
+
 		console.log('Running selectedWindows useEffect');
 		(async () => {
 			const store = await load('settings.json');
