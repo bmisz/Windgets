@@ -3,7 +3,7 @@ import skip from './assets/skip-button.svg';
 import spotify from './assets/spotify-logo.svg';
 import pause from './assets/pause.svg';
 
-//TODO do this idk if i ever wanna make a spotify one.
+//TODO Idk if I ever wanna make a spotify one.
 export default function Spotify() {
 
 	

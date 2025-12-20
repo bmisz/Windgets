@@ -8,15 +8,7 @@
 	color: #979797;
 	font-weight: bolder;
 }
-.win-setting {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-.slider {
-	box-shadow: none;
-	width: 70vw;
-}
+
 .widget-select-list {
 	display: flex;
 	list-style: none;

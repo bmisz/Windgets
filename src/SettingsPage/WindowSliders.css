@@ -1,0 +1,9 @@
+.win-setting {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.slider {
+	box-shadow: none;
+	width: 70vw;
+}

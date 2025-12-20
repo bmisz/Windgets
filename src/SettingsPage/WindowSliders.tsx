@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import type { UserSettings } from "./SettingsPage";
-import "./SettingsPage.css";
+import "./WindowSliders.css";
 
 type WindowSliderProps = {
     settings: UserSettings;

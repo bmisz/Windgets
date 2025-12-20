@@ -11,7 +11,7 @@ export type UserSettings = {
 	x: number;
 	y: number;
 };
-
+// TODO, clean up the 1 Million comments in this function.
 export default function SettingsPage() {
 	const defaultSettings: UserSettings = {
 		location: 'Boston',
