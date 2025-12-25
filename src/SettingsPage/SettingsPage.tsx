@@ -11,7 +11,7 @@ export type UserSettings = {
 	x: number;
 	y: number;
 };
-// TODO, clean up the 1 Million comments in this function.
+// TODO, clean up the 1 Million console.logs in this function.
 export default function SettingsPage() {
 	const defaultSettings: UserSettings = {
 		location: 'Boston',
@@ -19,17 +19,18 @@ export default function SettingsPage() {
 		x: 100,
 		y: 100,
 	};
-	const [settings, setSettings] = useState<UserSettings>(defaultSettings);
+	const [weatherSettings, setSettings] =
+		useState<UserSettings>(defaultSettings);
 	const [isInitialized, setIsInitialized] = useState(false);
 
 	useEffect(() => {
 		const loadSettings = async () => {
-			const store = await load('settings.json');
+			const store = await load('weatherSettings.json');
 			const val = await store.get<UserSettings>('userSettings');
 			if (val) {
 				setSettings(val);
 			} else {
-				console.log('No settings found, initializing defaults.');
+				console.log('No weatherSettings found, initializing defaults.');
 
 				await store.set('userSettings', defaultSettings);
 				await store.save();
@@ -37,34 +38,36 @@ export default function SettingsPage() {
 			setIsInitialized(true);
 		};
 		loadSettings();
+		console.log(weatherSettings);
 	}, []);
 
 	useEffect(() => {
 		if (!isInitialized) return;
 
 		const saveSettings = async () => {
-			const store = await load('settings.json');
-			await store.set('userSettings', settings);
+			const store = await load('weatherSettings.json');
+			await store.set('userSettings', weatherSettings);
 			await store.save();
-			console.log('Settings saved to disk');
-			updateWindowPosition();
+			updateWindowPosition(weatherSettings);
 		};
 
 		saveSettings();
-	}, [settings, isInitialized]);
+	}, [weatherSettings, isInitialized]);
 
-	const updateWindowPosition = useCallback(async () => {
-		let win = await WebviewWindow.getByLabel('weather');
-		if ((settings?.x ?? 0) === 0) {
-			console.log('X is 0');
-		}
-		let realX = (screen.width * (settings?.x ?? 0)) / 100;
-		let realY = (screen.height * (settings?.y ?? 0)) / 100;
-		console.log('real x and y: ', realX, realY);
-		win?.setPosition(new LogicalPosition(realX, realY)).catch((error) =>
-			console.log(error)
-		);
-	}, [settings?.x, settings?.y]);
+	const updateWindowPosition = useCallback(
+		async (settings: UserSettings) => {
+			let win = await WebviewWindow.getByLabel('weather');
+			if ((settings?.x ?? 0) === 0) {
+				console.log('X is 0');
+			}
+			let realX = (screen.width * (settings?.x ?? 0)) / 100;
+			let realY = (screen.height * (settings?.y ?? 0)) / 100;
+			win?.setPosition(new LogicalPosition(realX, realY)).catch((error) =>
+				console.log(error)
+			);
+		},
+		[weatherSettings?.x, weatherSettings?.y]
+	);
 
 	return (
 		<div className="mainpage">
@@ -72,7 +75,7 @@ export default function SettingsPage() {
 			<a>Enter City:</a>
 			<input
 				type="text"
-				value={settings?.location ?? ''}
+				value={weatherSettings?.location ?? ''}
 				onChange={(e) => {
 					const newVal = e.target.value;
 					setSettings((prev) => ({
@@ -85,9 +88,16 @@ export default function SettingsPage() {
 			<a className="example">Boston, US</a>
 			<a className="example">Boston, MA, US</a>
 
-			<a>Window Position</a>
-			<WindowSliders settings={settings} setSettings={setSettings} />
-			<WindowSelect updateWindowPosition={updateWindowPosition} />
+
+			<WindowSliders
+				settings={weatherSettings}
+				setSettings={setSettings}
+			/>
+			<WindowSelect
+				updateWindowPosition={() =>
+					updateWindowPosition(weatherSettings)
+				}
+			/>
 		</div>
 	);
 }

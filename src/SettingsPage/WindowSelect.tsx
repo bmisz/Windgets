@@ -2,6 +2,7 @@ import './SettingsPage.css';
 import { useState, useEffect, useRef } from 'react';
 import { load } from '@tauri-apps/plugin-store';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
+import WindowSliders from './WindowSliders';
 
 export default function WindowSelect({
 	updateWindowPosition,
@@ -11,7 +12,7 @@ export default function WindowSelect({
 	const [selectedWindows, setSelectedWindows] = useState<string[]>([]);
 	const [isInitialized, setIsInitialized] = useState(false);
 
-	interface WidgetParameter {
+	type WidgetParameter = {
 		url: string;
 		label: string;
 		title: string;
@@ -67,19 +68,18 @@ export default function WindowSelect({
 	useEffect(() => {
 		if (!isInitialized) return;
 
-		console.log('Running selectedWindows useEffect');
 		(async () => {
 			const store = await load('settings.json');
 			await store.set('selectedWindows', selectedWindows);
-			const windowsSelected = await store.get('selectedWindows');
-			console.log(windowsSelected);
+			
 			await store.save();
 			console.log('Store saved selectedWindows');
 		})();
 
+		//This async function creates new windows based of parameters in the widgetParameters array.
 		(async () => {
 			for (const windowId of selectedWindows) {
-				const widgetIndex = parseInt(windowId, 10);
+				const widgetIndex = parseInt(windowId);
 				const params = windowParameters[widgetIndex];
 				if (!params) {
 					console.warn(
@@ -135,14 +135,14 @@ export default function WindowSelect({
 	}
 
 	async function createNewWidget(WidgetParameters: WidgetParameter) {
-		// double-check before creating
+
 		try {
 			const existing = await WebviewWindow.getByLabel(
 				WidgetParameters.label
 			);
 			if (existing) return existing;
 		} catch {
-			// not found — safe to create
+			console.error('Error checking for existing window');
 		}
 
 		const webview = new WebviewWindow(WidgetParameters.label, {
@@ -183,23 +183,42 @@ export default function WindowSelect({
 		<div>
 			<a>Widget Select:</a>
 			<ul className="widget-select-list">
-				<li>
-					<input
-						type="checkbox"
-						checked={selectedWindows.includes('0')}
-						onChange={() => handleSelect(0, 'weather')}
-					/>
-					<label>Weather</label>
-				</li>
-				<li>
-					<input
-						type="checkbox"
-						checked={selectedWindows.includes('1')}
-						onChange={() => handleSelect(1, 'spotify')}
-					/>
-					<label>Spotify</label>
-				</li>
+				<WindowCheckbox selectedWindows={selectedWindows} index={0} label="weather" handleSelect={handleSelect} />
+				<WindowSliders settings={settings} setSettings={setSettings} />
+				<WindowCheckbox selectedWindows={selectedWindows} index={1} label="spotify" handleSelect={handleSelect} />
 			</ul>
 		</div>
+	);
+}
+
+type weatherCheckboxProps = {
+	selectedWindows: string[];
+	index: number;
+	label: string;
+	handleSelect: (index: number, label: string) => void;
+};
+/**
+ * Creates the checkbox for each widget.
+ * 
+ * Be sure to not reused the same index for different widgets. 
+ * 
+ * @param {weatherCheckboxProps} {selectedWindows, index, label, handleSelect} 
+ * @returns {JSX.Element}
+ */
+function WindowCheckbox({selectedWindows, index, label, handleSelect}: weatherCheckboxProps) {
+	function capitalizeLabel(label: string) {
+		const firstLetter = label.charAt(0).toUpperCase();
+		const restOfLabel = label.slice(1).toLowerCase();
+		return firstLetter + restOfLabel;
+	}
+	return (
+		<li>
+			<input
+				type="checkbox"
+				checked={selectedWindows.includes(index.toString())}
+				onChange={() => handleSelect(index, label)}
+			/>
+			<label>{capitalizeLabel(label)}</label>
+		</li>
 	);
 }
