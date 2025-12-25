@@ -19,16 +19,16 @@ export default function SettingsPage() {
 		x: 100,
 		y: 100,
 	};
-	const [weatherSettings, setSettings] =
+	const [weatherSettings, setWeatherSettings] =
 		useState<UserSettings>(defaultSettings);
 	const [isInitialized, setIsInitialized] = useState(false);
 
 	useEffect(() => {
 		const loadSettings = async () => {
-			const store = await load('weatherSettings.json');
+			const store = await load('settings.json');
 			const val = await store.get<UserSettings>('userSettings');
 			if (val) {
-				setSettings(val);
+				setWeatherSettings(val);
 			} else {
 				console.log('No weatherSettings found, initializing defaults.');
 
@@ -45,7 +45,7 @@ export default function SettingsPage() {
 		if (!isInitialized) return;
 
 		const saveSettings = async () => {
-			const store = await load('weatherSettings.json');
+			const store = await load('settings.json');
 			await store.set('userSettings', weatherSettings);
 			await store.save();
 			updateWindowPosition(weatherSettings);
@@ -78,7 +78,7 @@ export default function SettingsPage() {
 				value={weatherSettings?.location ?? ''}
 				onChange={(e) => {
 					const newVal = e.target.value;
-					setSettings((prev) => ({
+					setWeatherSettings((prev) => ({
 						...prev,
 						location: newVal,
 					}));
@@ -88,15 +88,14 @@ export default function SettingsPage() {
 			<a className="example">Boston, US</a>
 			<a className="example">Boston, MA, US</a>
 
-
-			<WindowSliders
-				settings={weatherSettings}
-				setSettings={setSettings}
-			/>
 			<WindowSelect
 				updateWindowPosition={() =>
 					updateWindowPosition(weatherSettings)
 				}
+			/>
+			<WindowSliders
+				settings={weatherSettings}
+				setSettings={setWeatherSettings}
 			/>
 		</div>
 	);

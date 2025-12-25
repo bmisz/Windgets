@@ -16,8 +16,11 @@ export default function Weather() {
 	const [descriptor, setDescriptor] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
-		const userLoc = getUserLocation();
-		setUserLocation(userLoc);
+		(async () => {
+			const userLoc = await getUserLocation();
+			setUserLocation(userLoc);
+		})();
+
 		fetchWeather();
 
 		const interval = setInterval(
@@ -53,7 +56,7 @@ export default function Weather() {
 				userLocation = userSettings.location.replace(/,(\s*)/g, ',');
 				console.log(userLocation);
 			} else {
-				console.log(userLocation);
+				console.log('No userSettings found', userLocation);
 			}
 
 			const response = await fetch(
@@ -163,10 +166,15 @@ export default function Weather() {
 	async function getUserLocation() {
 		const userSettings = await getUserSettings();
 
-		if (userSettings !== undefined) {
+		if (userSettings && userSettings.location) {
 			const rawLocation: string = userSettings.location;
 			const commaLocation: number = rawLocation.indexOf(',');
-			const pureLocation: string = rawLocation.substring(0, commaLocation);
+
+			const pureLocation: string =
+				commaLocation === -1
+					? rawLocation
+					: rawLocation.substring(0, commaLocation);
+
 			return pureLocation;
 		}
 		return 'Loading...';

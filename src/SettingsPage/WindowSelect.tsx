@@ -2,7 +2,7 @@ import './SettingsPage.css';
 import { useState, useEffect, useRef } from 'react';
 import { load } from '@tauri-apps/plugin-store';
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
-import WindowSliders from './WindowSliders';
+
 
 export default function WindowSelect({
 	updateWindowPosition,
@@ -184,7 +184,7 @@ export default function WindowSelect({
 			<a>Widget Select:</a>
 			<ul className="widget-select-list">
 				<WindowCheckbox selectedWindows={selectedWindows} index={0} label="weather" handleSelect={handleSelect} />
-				<WindowSliders settings={settings} setSettings={setSettings} />
+				
 				<WindowCheckbox selectedWindows={selectedWindows} index={1} label="spotify" handleSelect={handleSelect} />
 			</ul>
 		</div>
